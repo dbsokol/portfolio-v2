@@ -174,6 +174,21 @@
   .venture:hover .vurl{color:var(--rose)}
   @media(max-width:600px){.venture{flex-wrap:wrap;gap:12px}.venture .vhead{width:auto;flex:1}.venture .vbody{flex-basis:100%}}
 
+  /* ============ papers ============ */
+  .papers{max-width:680px;margin:0 auto;display:grid;gap:14px}
+  .paper{
+    display:block;background:var(--paper);
+    border:1.5px solid var(--line);border-radius:3px;
+    padding:18px 22px;transition:.18s;
+  }
+  .paper:hover{border-color:var(--indigo)}
+  .paper .pk{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--teal);text-transform:uppercase;letter-spacing:.06em}
+  .paper h3{font-family:'Oswald',sans-serif;font-size:19px;font-weight:600;color:var(--indigo);margin:3px 0 6px;letter-spacing:.01em;line-height:1.25}
+  .paper .pauthors{font-size:13px;color:var(--ink-soft);line-height:1.55}
+  .paper .pauthors b{color:var(--ink);font-weight:600}
+  .paper .purl{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--teal);margin-top:8px;display:inline-block}
+  .paper:hover .purl{color:var(--rose)}
+
   /* ============ paintings reel — film strip ============ */
   .reel{
     max-width:680px;margin:0 auto;position:relative;overflow:hidden;
@@ -239,6 +254,7 @@
     <a href="#top" class="active" aria-label="Overview"><svg viewBox="0 0 24 24"><path d="M3 12l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span class="tip">Overview</span></a>
     <a href="#focus" aria-label="What I build"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/></svg><span class="tip">What I build</span></a>
     <a href="#ventures" aria-label="Ventures"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M10 21v-6h4v6"/></svg><span class="tip">Ventures</span></a>
+    <a href="#papers" aria-label="Papers"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span class="tip">Papers</span></a>
     <a href="#paintings" aria-label="Paintings"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="9" r="1.4"/></svg><span class="tip">Paintings</span></a>
     <a href="#about" aria-label="About"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0114 0v1"/></svg><span class="tip">About</span></a>
   </nav>
@@ -313,6 +329,23 @@
     </a>
   </div>
 
+  <div class="tab" id="papers"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Papers</div>
+  <div class="papers">
+    <a class="paper" href="https://doi.org/10.1016/j.echo.2026.07.004" target="_blank" rel="noopener">
+      <div class="pk">J Am Soc Echocardiogr · 2026</div>
+      <h3>Automated Detection of Clinically Significant Mitral Regurgitation from Single-View B-mode Echocardiography Using Deep Learning</h3>
+      <p class="pauthors">Sandler RA, Sokol JZ, Pawar S, Gilgur A, Jhawer A, Sadri S, <b>Sokol DB</b>, Muche M, Stojmenski A, Guptan M, Penn J, Makkar R, Gupta A — <i>J Am Soc Echocardiogr</i>. 2026 Jul.</p>
+      <span class="purl">doi.org/10.1016/j.echo.2026.07.004 ↗</span>
+    </a>
+
+    <a class="paper" href="https://doi.org/10.1016/j.echo.2023.01.006" target="_blank" rel="noopener">
+      <div class="pk">J Am Soc Echocardiogr · 2023</div>
+      <h3>Automated Detection of Aortic Stenosis Using Machine Learning</h3>
+      <p class="pauthors">Wessler BS, Huang Z, Long GM Jr, Pacifici S, Prashar N, Karmiy S, Sandler RA, Sokol JZ, <b>Sokol DB</b>, Dehn MM, Maslon L, Mai E, Patel AR, Hughes MC — <i>J Am Soc Echocardiogr</i>. 2023 Apr;36(4):411–420.</p>
+      <span class="purl">doi.org/10.1016/j.echo.2023.01.006 ↗</span>
+    </a>
+  </div>
+
   <div class="tab" id="paintings"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="9" r="1.4"/></svg>Paintings</div>
   <div class="reel">
     <div class="reel-scroll">
@@ -336,7 +369,7 @@
 </main>
 
 <script>
-  const secs=[...document.querySelectorAll('#top,#focus,#ventures,#paintings,#about')];
+  const secs=[...document.querySelectorAll('#top,#focus,#ventures,#papers,#paintings,#about')];
   const links=[...document.querySelectorAll('.rail nav a')];
   const io=new IntersectionObserver(es=>{
     es.forEach(e=>{if(e.isIntersecting){
