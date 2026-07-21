@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daniel B. Sokol — Résumé</title>
+<link rel="icon" type="image/png" sizes="32x32" href="./favicon-32x32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;margin:0;padding:0}
+  :root{
+    --ink:#1c1e21;
+    --soft:#55595e;
+    --line:#c9ccd1;
+    --rule:#222;
+  }
+  body{
+    background:#e7e7e7;
+    font-family:'Inter',system-ui,sans-serif;
+    color:var(--ink);
+    -webkit-font-smoothing:antialiased;
+    padding:32px 16px;
+  }
+  .sheet{
+    width:8.5in;min-height:11in;margin:0 auto;
+    background:#fff;padding:0.4in 0.55in;
+    box-shadow:0 6px 30px rgba(0,0,0,.18);
+  }
+  a{color:inherit;text-decoration:none}
+
+  /* ---- header ---- */
+  .name{
+    font-family:'Oswald',sans-serif;font-weight:600;
+    font-size:25px;letter-spacing:.03em;text-transform:uppercase;line-height:1;
+  }
+  .subtitle{
+    font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.06em;
+    color:var(--soft);text-transform:uppercase;margin-top:7px;
+  }
+  .contact{
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--soft);
+    margin-top:11px;display:flex;flex-wrap:wrap;gap:5px 14px;line-height:1.5;
+  }
+  .contact a{color:var(--ink);border-bottom:1px solid var(--line)}
+  .contact span{white-space:nowrap}
+
+  .hr{height:2px;background:var(--rule);margin:12px 0 0}
+
+  /* ---- section ---- */
+  section{margin-top:14px}
+  .sec-head{
+    font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;
+    letter-spacing:.15em;text-transform:uppercase;
+    padding-bottom:4px;border-bottom:1px solid var(--line);margin-bottom:9px;
+  }
+  .summary{font-size:12.5px;line-height:1.55;color:#2c2f33}
+
+  /* ---- experience ---- */
+  .entry{margin-bottom:8px}
+  .entry:last-child{margin-bottom:0}
+  .entry-top{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+  .entry-org{font-family:'Oswald',sans-serif;font-weight:600;font-size:16px;letter-spacing:.01em}
+  .entry-role{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.05em;text-transform:uppercase;color:var(--soft);white-space:nowrap}
+  .entry-desc{font-size:12px;line-height:1.5;color:#33363a;margin-top:3px}
+  .bullets{list-style:none;margin-top:4px}
+  .bullets li{position:relative;padding-left:14px;font-size:11.5px;line-height:1.45;color:#33363a;margin-bottom:3px}
+  .bullets li::before{content:"";position:absolute;left:3px;top:7px;width:3px;height:3px;background:#666;border-radius:50%}
+
+  /* ---- skills ---- */
+  .skills{display:grid;gap:5px}
+  .skill-line{display:flex;gap:14px;align-items:baseline}
+  .sk-cat{flex:none;width:88px;font-family:'JetBrains Mono',monospace;font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:#000;padding-top:1px}
+  .sk-list{font-size:11.5px;line-height:1.45;color:#2c2f33}
+
+  /* ---- education ---- */
+  .edu{display:grid;gap:9px}
+  .edu-item{display:flex;gap:16px;align-items:baseline}
+  .edu-year{flex:none;width:44px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--soft)}
+  .edu-deg{font-family:'Oswald',sans-serif;font-weight:600;font-size:14.5px}
+  .edu-school{font-size:12px;color:var(--soft);margin-top:1px}
+
+  /* ---- print ---- */
+  @media print{
+    @page{size:letter;margin:0}          /* margin:0 drops the browser date/URL/page headers */
+    body{background:#fff;padding:0}
+    .sheet{width:auto;height:auto;overflow:visible;margin:0;padding:0.4in 0.55in;box-shadow:none}
+  }
+</style>
+</head>
+<body>
+<main class="sheet">
+
+  <header>
+    <div class="name">Daniel B. Sokol</div>
+    <div class="subtitle">Software Engineer · Head of Engineering, iCardio.ai</div>
+    <div class="contact">
+      <span>San Diego, CA 92109</span>
+      <span>310 435 5914</span>
+      <span><a href="mailto:messageme@danielbsokol.engineer">messageme@danielbsokol.engineer</a></span>
+      <span><a href="https://github.com/dbsokol">github.com/dbsokol</a></span>
+      <span><a href="https://www.linkedin.com/in/daniel-sokol-b69b0a10b/">LinkedIn</a></span>
+      <span><a href="https://stackoverflow.com/users/12821675/daniel">Stack Overflow</a></span>
+      <span><a href="https://danielbsokol.engineer">danielbsokol.engineer</a></span>
+    </div>
+  </header>
+
+  <div class="hr"></div>
+
+  <section>
+    <div class="sec-head">Summary</div>
+    <p class="summary">Software engineer based in San Diego, California, currently Head of Engineering at iCardio.ai. Experience building complex systems across aerospace, ecommerce, real estate, and fintech — from clinical AI imaging pipelines to cross-border payment infrastructure.</p>
+  </section>
+
+  <section>
+    <div class="sec-head">Technical Skills</div>
+    <div class="skills">
+      <div class="skill-line"><span class="sk-cat">Languages</span><span class="sk-list">Python, TypeScript / JavaScript, SQL, Bash, Go, HTML/CSS</span></div>
+      <div class="skill-line"><span class="sk-cat">Frameworks</span><span class="sk-list">FastAPI, Django, React</span></div>
+      <div class="skill-line"><span class="sk-cat">ML / Data</span><span class="sk-list">PyTorch, TensorFlow, NumPy, pandas</span></div>
+      <div class="skill-line"><span class="sk-cat">Databases</span><span class="sk-list">PostgreSQL, MySQL, MongoDB, Redis, BigQuery, Snowflake</span></div>
+      <div class="skill-line"><span class="sk-cat">Cloud</span><span class="sk-list">AWS, GCP, Lambda, S3, ECS/EKS, Cloud Run, Vertex AI</span></div>
+      <div class="skill-line"><span class="sk-cat">Tools</span><span class="sk-list">Docker, Kubernetes, Terraform, Git</span></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">Experience</div>
+
+    <div class="entry">
+      <div class="entry-top">
+        <div class="entry-org">iCardio.ai</div>
+        <div class="entry-role">Head of Engineering</div>
+      </div>
+      <ul class="bullets">
+        <li>Built and led the engineering team; owned system architecture and code review while staying hands-on in technical design and implementation.</li>
+        <li>Ran the full ML lifecycle — data collection and storage, label acquisition and vetting, model training, evaluation, and deployment.</li>
+        <li>Built Encephalon, a HIPAA-compliant customer-facing API serving 20+ models through an async workflow (study creation, DICOM upload, scan start), with models continuously updated, replaced, and re-pipelined.</li>
+        <li>Led AI-PACS, an AI-first PACS serving our own models alongside an embedded Vertex AI assistant to accelerate echo reads.</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-top">
+        <div class="entry-org">OlehPay</div>
+        <div class="entry-role">CTO</div>
+      </div>
+      <ul class="bullets">
+        <li>Led the team building a live, customer-facing US–Israel remittance platform used by thousands of users monthly, integrated directly with third-party banking systems.</li>
+        <li>Rebuilt the platform three times since inception; entrusted with customers' personal data and money, made security and trust the highest priority.</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-top">
+        <div class="entry-org">Airplant Gardens</div>
+        <div class="entry-role">Co-founder</div>
+      </div>
+      <ul class="bullets">
+        <li>Built the full ecommerce platform in-house — storefront, subscriptions, billing, and fulfilment — plus a sponsorship partner portal for tracking sponsor leads. Acquired in 2020.</li>
+      </ul>
+    </div>
+
+    <div class="entry">
+      <div class="entry-top">
+        <div class="entry-org">OceanPads</div>
+        <div class="entry-role">Co-founder</div>
+      </div>
+      <ul class="bullets">
+        <li>Built a real-estate platform for Miami on heavy GeoJSON data, mapping the city's dense high-rise condo market with a clarity that generic listing apps lacked.</li>
+      </ul>
+    </div>
+  </section>
+
+  <section>
+    <div class="sec-head">Education</div>
+    <div class="edu">
+      <div class="edu-item">
+        <div class="edu-year">2019</div>
+        <div>
+          <div class="edu-deg">M.Eng., Software Engineering</div>
+          <div class="edu-school">University of Maryland, College Park</div>
+        </div>
+      </div>
+      <div class="edu-item">
+        <div class="edu-year">2016</div>
+        <div>
+          <div class="edu-deg">B.S., Aerospace Engineering</div>
+          <div class="edu-school">University of Maryland, College Park</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+</body>
+</html>

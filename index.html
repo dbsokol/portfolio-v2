@@ -35,15 +35,15 @@
   }
   a{color:inherit;text-decoration:none}
 
-  /* gears watermark — fixed behind everything */
+
+  /* cityscape background — fixed, full page, parallax drift via --py.
+     over-sized top/bottom so the drift never exposes an edge */
   body::before{
-    content:"";position:fixed;top:50%;left:50%;
-    transform:translate(-50%,calc(-50% + var(--py,0px)));
-    width:100vw;aspect-ratio:1;z-index:0;pointer-events:none;
-    background:url(./gears.gif) center/contain no-repeat;
-    opacity:.03;
-    -webkit-mask-image:radial-gradient(circle closest-side,#000 40%,transparent 95%);
-    mask-image:radial-gradient(circle closest-side,#000 40%,transparent 95%);
+    content:"";position:fixed;top:-25%;bottom:-25%;left:0;right:0;z-index:0;pointer-events:none;
+    background:url(./cityscape.svg) center/cover no-repeat;
+    opacity:.85;
+    transform:translateY(var(--py,0px));
+    will-change:transform;
   }
 
   /* ============ side rail nav ============ */
@@ -75,16 +75,16 @@
   }
   .rail .foot svg{stroke:rgba(233,228,216,.5);stroke-width:1.4;fill:none;stroke-linecap:round;stroke-linejoin:round;width:20px;height:20px}
 
-  /* music toggle — click is the user gesture browsers require for audio */
-  .music{
+  /* rail buttons — music toggle + résumé/print (click is also the gesture audio needs) */
+  .music,.print{
     width:44px;height:44px;border-radius:4px;border:0;background:transparent;
     color:rgba(233,228,216,.55);cursor:pointer;position:relative;
     display:flex;align-items:center;justify-content:center;transition:.18s;
     margin-bottom:4px;
   }
-  .music:hover,.music.on{color:var(--paper);background:rgba(233,228,216,.1)}
-  .music svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
-  .music:hover .tip{opacity:1;transform:translate(0,-50%)}
+  .music:hover,.music.on,.print:hover{color:var(--paper);background:rgba(233,228,216,.1)}
+  .music svg,.print svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+  .music:hover .tip,.print:hover .tip{opacity:1;transform:translate(0,-50%)}
   .player{
     position:fixed;left:calc(var(--rail) + 12px);bottom:14px;z-index:50;
     width:250px;border:1.5px solid var(--line);border-radius:3px;overflow:hidden;
@@ -98,6 +98,16 @@
   /* ============ stage ============ */
   .stage{margin:0 auto;max-width:840px;padding:44px 46px 60px;z-index:1}
   @media(max-width:720px){.stage{padding:28px 22px 48px}}
+
+  /* solid rounded panel behind each section, cityscape shows in the gaps */
+  .panel{
+    max-width:748px;margin:0 auto 22px;padding:30px 34px;
+    background:var(--paper);
+    border:1.5px solid var(--line);border-radius:12px;
+    box-shadow:0 6px 26px rgba(20,16,32,.28);
+  }
+  .panel > :first-child{margin-top:0}
+  .panel .tab{margin-top:0}
 
   /* subtle corner ticks instead of rivets — flat drawn marks */
   .sheet{position:relative}
@@ -139,6 +149,7 @@
 
   /* ============ section label ============ */
   .tab{
+    position:relative;
     display:flex;align-items:center;gap:11px;margin:42px auto 16px;max-width:680px;
     font-family:'Oswald',sans-serif;font-weight:600;font-size:15px;
     text-transform:uppercase;letter-spacing:.15em;color:var(--ink);
@@ -169,7 +180,7 @@
   .venture{
     display:flex;gap:16px;align-items:flex-start;
     border:1.5px solid var(--line);border-radius:3px;
-    padding:18px 22px;transition:.18s;background:var(--paper);
+    padding:18px 22px;transition:.18s;background:var(--plate);
   }
   .venture:hover{border-color:var(--indigo)}
   .venture .logo{
@@ -195,7 +206,12 @@
   /* ============ papers ============ */
   .papers{max-width:680px;margin:0 auto;display:grid;gap:14px}
   .paper{
-    display:block;background:var(--paper);
+    display:block;
+    background-color:var(--plate);
+    background-image:
+      linear-gradient(var(--grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:22px 22px;
     border:1.5px solid var(--line);border-radius:3px;
     padding:18px 22px;transition:.18s;
   }
@@ -207,34 +223,77 @@
   .paper .purl{font-family:'JetBrains Mono',monospace;font-size:11.5px;color:var(--teal);margin-top:8px;display:inline-block}
   .paper:hover .purl{color:var(--rose)}
 
-  /* ============ paintings reel — film strip ============ */
-  .reel{
-    max-width:680px;margin:0 auto;position:relative;overflow:hidden;
+  /* ============ skills — spec sheet ============ */
+  .spec{
+    max-width:680px;margin:0 auto;overflow:hidden;
     border:1.5px solid var(--line);border-radius:3px;
-    background:var(--plate);
-    -webkit-mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
-    mask-image:linear-gradient(90deg,transparent,#000 6%,#000 94%,transparent);
+    background-color:var(--plate);
+    background-image:
+      linear-gradient(var(--grid) 1px,transparent 1px),
+      linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+    background-size:22px 22px;
   }
-  /* sprocket perforations — pinned to the frame, not the scroller */
-  .reel::before,.reel::after{
-    content:"";position:absolute;left:0;right:0;height:15px;z-index:2;pointer-events:none;
-    background:repeating-linear-gradient(90deg,var(--paper) 0 9px,transparent 9px 22px);
+  .spec-head{
+    display:flex;justify-content:space-between;align-items:center;
+    padding:9px 18px;border-bottom:1.5px solid var(--line);
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.12em;
+    text-transform:uppercase;color:var(--ink-soft);
   }
-  .reel::before{top:0}
-  .reel::after{bottom:0}
-  .reel-scroll{
-    overflow-x:auto;overflow-y:hidden;padding:15px 0;
-    cursor:grab;scrollbar-width:none;
+  .spec-row{
+    display:flex;gap:20px;align-items:baseline;
+    padding:13px 18px;border-bottom:1px dashed var(--line-soft);
   }
-  .reel-scroll::-webkit-scrollbar{display:none}
-  .reel-scroll.dragging{cursor:grabbing}
-  .reel-track{display:flex;width:max-content}
-  .reel-track img{
-    flex:none;height:300px;width:auto;display:block;margin-right:12px;
-    border:1.5px solid var(--line);border-radius:2px;background:var(--paper);
-    user-select:none;-webkit-user-drag:none;
+  .spec-row:last-child{border-bottom:0}
+  .spec-k{
+    flex:none;width:130px;
+    font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:.05em;
+    text-transform:uppercase;color:var(--teal);padding-top:2px;
   }
-  @media(max-width:600px){.reel-track img{height:200px}}
+  .spec-v{font-family:'Oswald',sans-serif;font-weight:500;font-size:16px;letter-spacing:.02em;color:var(--ink)}
+  @media(max-width:560px){.spec-row{flex-direction:column;gap:4px}.spec-k{width:auto}}
+
+  /* ============ education ============ */
+  .edu{max-width:680px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:12px 26px}
+  @media(max-width:600px){.edu{grid-template-columns:1fr}}
+  .edu-item{display:flex;gap:14px;align-items:baseline;flex-wrap:wrap}
+  .edu-item .ek{flex:none;width:44px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--teal);letter-spacing:.04em}
+  .edu-item .edeg{font-family:'Oswald',sans-serif;font-size:17px;font-weight:600;color:var(--ink);letter-spacing:.01em}
+  .edu-item .esch{font-size:14px;color:var(--ink-soft)}
+
+  /* ============ paintings gallery grid ============ */
+  .gallery{
+    max-width:680px;margin:0 auto;
+    display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  }
+  .gallery img{
+    width:100%;aspect-ratio:1;object-fit:cover;display:block;
+    border:1.5px solid var(--line);border-radius:3px;background:var(--plate);
+    cursor:zoom-in;transition:.18s;
+  }
+  .gallery img:hover{border-color:var(--indigo);filter:brightness(1.04)}
+  @media(max-width:600px){.gallery{grid-template-columns:repeat(2,1fr)}}
+
+  /* ============ lightbox ============ */
+  .lightbox{
+    position:fixed;inset:0;z-index:100;
+    display:flex;align-items:center;justify-content:center;padding:5vh 5vw;
+    background:rgba(18,14,28,.9);
+    opacity:0;visibility:hidden;transition:opacity .2s;
+    cursor:zoom-out;
+  }
+  .lightbox.open{opacity:1;visibility:visible}
+  .lightbox img{
+    max-width:100%;max-height:90vh;object-fit:contain;
+    border:1.5px solid rgba(233,228,216,.4);border-radius:3px;
+    box-shadow:0 10px 50px rgba(0,0,0,.5);
+  }
+  .lightbox .close{
+    position:absolute;top:18px;right:22px;width:40px;height:40px;
+    border:0;background:transparent;color:var(--paper);cursor:pointer;
+    display:flex;align-items:center;justify-content:center;opacity:.7;transition:.18s;
+  }
+  .lightbox .close:hover{opacity:1}
+  .lightbox .close svg{width:26px;height:26px;stroke:currentColor;stroke-width:1.8;fill:none;stroke-linecap:round}
 
   /* ============ about ============ */
   .about{max-width:640px;margin:0 auto;text-align:center}
@@ -244,7 +303,7 @@
 
   /* ============ signoff ============ */
   .signoff{
-    max-width:680px;margin:40px auto 0;padding-top:18px;border-top:1.5px solid var(--line);
+    max-width:680px;margin:24px auto 0;
     display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;
     font-family:'Oswald',sans-serif;text-transform:uppercase;letter-spacing:.1em;font-size:14px;color:var(--ink-soft);
   }
@@ -254,13 +313,128 @@
   .rivet{position:absolute!important;z-index:0;width:12px;height:12px;border-radius:50%;
     border:1.5px solid var(--line);background:var(--paper);pointer-events:none}
   .rivet::after{content:"";position:absolute;inset:2.5px;border-radius:50%;background:var(--line)}
-  .tab .rivet{top:50%;margin-top:-6px}
-  .tab .rivet.l{left:-20px}
-  .tab .rivet.r{right:-20px}
+  .tab .rivet,.divider .rivet{top:50%;margin-top:-6px}
+  .tab .rivet.l,.divider .rivet.l{left:-20px}
+  .tab .rivet.r,.divider .rivet.r{right:-20px}
+  /* bottom-of-section rule: one solid line with a rivet at each end */
+  .divider{position:relative;max-width:680px;margin:26px auto 0;height:1.5px;background:var(--line)}
   .stage > *:not(.rivet){position:relative;z-index:1}
 
   :focus-visible{outline:2px solid var(--rose);outline-offset:2px}
   @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto}}
+
+  /* ============ contact modal ============ */
+  .modal{
+    position:fixed;inset:0;z-index:110;
+    display:flex;align-items:center;justify-content:center;padding:5vh 20px;
+    background:rgba(18,14,28,.9);
+    opacity:0;visibility:hidden;transition:opacity .2s;
+  }
+  .modal.open{opacity:1;visibility:visible}
+  .modal-box{
+    width:100%;max-width:440px;position:relative;
+    background:var(--paper);border:1.5px solid var(--line);border-radius:10px;
+    box-shadow:0 12px 50px rgba(0,0,0,.5);padding:26px 26px 20px;
+  }
+  .modal-close{
+    position:absolute;top:12px;right:14px;width:30px;height:30px;border:0;background:transparent;
+    color:var(--ink-soft);cursor:pointer;font-size:17px;line-height:1;
+  }
+  .modal-close:hover{color:var(--ink)}
+  .modal-title{
+    font-family:'Oswald',sans-serif;font-weight:600;font-size:20px;letter-spacing:.02em;
+    text-transform:uppercase;color:var(--ink);margin-bottom:16px;
+  }
+  .modal form{display:grid;gap:12px}
+  .modal label{
+    display:grid;gap:5px;
+    font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--teal);
+  }
+  .modal input,.modal textarea{
+    font-family:'Inter',sans-serif;font-size:14px;color:var(--ink);
+    background:var(--plate);border:1.5px solid var(--line);border-radius:5px;
+    padding:9px 11px;width:100%;resize:vertical;
+  }
+  .modal input:focus,.modal textarea:focus{outline:none;border-color:var(--indigo)}
+  .modal-send{
+    margin-top:4px;font-family:'Oswald',sans-serif;font-weight:600;font-size:14px;
+    text-transform:uppercase;letter-spacing:.08em;color:var(--paper);
+    background:var(--indigo);border:0;border-radius:5px;padding:10px;cursor:pointer;transition:.18s;
+  }
+  .modal-send:hover{background:var(--ink)}
+  .modal-send:disabled{opacity:.6;cursor:default}
+  .modal-status{font-size:12.5px;color:var(--ink-soft);min-height:15px;text-align:center;margin-top:2px}
+  .modal-status.ok{color:var(--teal)}
+  .modal-status.err{color:var(--rose)}
+
+  /* ============ shortcuts legend (desktop, left gutter) ============ */
+  .legend{
+    position:fixed;top:44px;left:calc(var(--rail) + 22px);z-index:35;
+    width:174px;padding:12px 14px;pointer-events:none;
+    background:var(--paper);border:1.5px solid var(--line);border-radius:8px;
+    box-shadow:0 6px 22px rgba(20,16,32,.25);
+  }
+  .legend-title{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+  .legend-row{display:flex;align-items:center;gap:6px;font-size:11.5px;color:var(--ink-soft);margin-bottom:7px}
+  .legend-row:last-child{margin-bottom:0}
+  .legend kbd{
+    font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--ink);
+    background:var(--plate);border:1px solid var(--line);border-radius:4px;
+    padding:2px 5px;line-height:1;box-shadow:0 1px 0 var(--line);
+    transition:background .18s,color .18s,border-color .18s,box-shadow .18s;
+  }
+  .legend kbd.lit{
+    background:var(--indigo);color:var(--paper);border-color:var(--indigo);
+    box-shadow:0 0 8px rgba(74,92,122,.55);
+  }
+  .legend-row span{margin-left:3px}
+  /* while music plays: up/down bounce (transform) + left/right sway (translate),
+     each on its own clock so the two axes drift and the motion feels random */
+  @keyframes key-bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-2.5px)}}
+  @keyframes key-sway{0%,100%{translate:-1px 0}50%{translate:1px 0}}
+  .music-row.playing .mod-key{animation:key-bounce .47s ease-in-out -.06s infinite, key-sway .68s ease-in-out -.20s infinite}
+  .music-row.playing .key-j{animation:key-bounce .63s ease-in-out .19s infinite, key-sway .53s ease-in-out .10s infinite}
+  .music-row.playing span{animation:key-bounce .41s ease-in-out .33s infinite, key-sway .75s ease-in-out .05s infinite}
+  @media(prefers-reduced-motion:reduce){.music-row.playing .mod-key,.music-row.playing .key-j,.music-row.playing span{animation:none}}
+  /* hide when the gutter is too narrow to hold it without touching content */
+  @media(max-width:1200px){.legend{display:none}}
+
+  /* ============ mobile ============ */
+  /* placed last so these overrides win over the base rules above */
+  @media(max-width:720px){
+    /* plain cream page: no cityscape, no card panels (rivets stay) */
+    body::before{display:none}
+    /* corner ticks poke 14px past the stage edge — off on mobile (kills the right overflow) */
+    .sheet::before,.sheet::after{display:none}
+    .panel{background:none;border:0;border-radius:0;box-shadow:none;padding:0;margin:0 auto 4px}
+    .stage{padding:26px 20px 44px}
+
+    /* header: stacked, centered, sized to fit — no more sideways overflow */
+    header{flex-direction:column;gap:14px;align-items:center;margin-bottom:0}
+    .avatar{width:112px;height:112px}
+    .head-txt{text-align:center;max-width:100%}
+    h1{font-size:clamp(28px,7.5vw,40px)}
+    .contact{margin-top:12px;font-size:11.5px;line-height:1.85}
+    .contact div{justify-content:center}
+
+    /* rhythm between sections */
+    .panel .tab{margin-top:30px;margin-bottom:14px}
+    .lede{font-size:16px;line-height:1.55;margin:16px auto 2px}
+    /* no per-section footer on mobile (kept on desktop) */
+    .divider{display:none}
+    /* symmetric rivet gap: left was jammed against the rail, right had space */
+    .tab .rivet.l{left:-10px}
+    .tab .rivet.r{right:-10px}
+    /* inset the header lines so they don't touch the rivets */
+    .tab::before{margin-left:16px}
+    .tab::after{margin-right:16px}
+  }
+  @media(max-width:430px){
+    h1{font-size:clamp(24px,8vw,34px)}
+    .contact{font-size:11px}
+  }
+
 </style>
 </head>
 <body>
@@ -270,14 +444,15 @@
   <a href="#top" class="mark" aria-label="Home">DS</a>
   <nav>
     <a href="#top" class="active" aria-label="Overview"><svg viewBox="0 0 24 24"><path d="M3 12l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span class="tip">Overview</span></a>
-    <a href="#focus" aria-label="What I build"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/></svg><span class="tip">What I build</span></a>
     <a href="#ventures" aria-label="Ventures"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M10 21v-6h4v6"/></svg><span class="tip">Ventures</span></a>
+    <a href="#education" aria-label="Education"><svg viewBox="0 0 24 24"><path d="M2 8.5l10-4 10 4-10 4z"/><path d="M6 10.5V16c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-5.5"/><path d="M22 8.5V14"/></svg><span class="tip">Education</span></a>
     <a href="#papers" aria-label="Papers"><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg><span class="tip">Papers</span></a>
+    <a href="#skills" aria-label="Skills"><svg viewBox="0 0 24 24"><path d="M8 6l-6 6 6 6"/><path d="M16 6l6 6-6 6"/></svg><span class="tip">Skills</span></a>
     <a href="#paintings" aria-label="Paintings"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="9" r="1.4"/></svg><span class="tip">Paintings</span></a>
     <a href="#about" aria-label="About"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0114 0v1"/></svg><span class="tip">About</span></a>
   </nav>
   <button class="music" aria-label="Play music" aria-pressed="false"><svg viewBox="0 0 24 24"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg><span class="tip">Music</span></button>
-  <div class="foot" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.3-7-11a7 7 0 0114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/></svg></div>
+  <a class="print" href="./resume.html" target="_blank" rel="noopener" aria-label="Open résumé"><svg viewBox="0 0 24 24"><path d="M6 9V2h12v7"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span class="tip">Résumé</span></a>
 </aside>
 
 <div class="player" id="player"></div>
@@ -285,14 +460,18 @@
 <!-- ============ stage ============ -->
 <main class="stage sheet" id="top">
 
+  <section class="panel sec-intro">
   <header>
-    <div class="avatar"><img src="./profile.jpg" alt="Daniel B. Sokol"></div>
+    <div class="avatar"><img src="./profile.png" alt="Daniel B. Sokol"></div>
     <div class="head-txt">
       <h1>Daniel B. Sokol</h1>
       <div class="contact">
         <div><svg viewBox="0 0 24 24"><path d="M12 21s-7-5.3-7-11a7 7 0 0114 0c0 5.7-7 11-7 11z"/><circle cx="12" cy="10" r="2.4"/></svg>San Diego, CA 92109</div>
         <div><svg viewBox="0 0 24 24"><path d="M4 5a2 2 0 012-2h2l2 5-2 1.5a11 11 0 005 5l1.5-2 5 2v2a2 2 0 01-2 2A16 16 0 014 5z"/></svg><a href="tel:+13104355914">310 435 5914</a></div>
         <div><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><a href="mailto:messageme@danielbsokol.engineer">messageme@danielbsokol.engineer</a></div>
+        <div><svg viewBox="0 0 24 24"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.5c0-1 .1-1.4-.5-2 2.8-.3 5.5-1.4 5.5-6a4.6 4.6 0 00-1.3-3.2 4.2 4.2 0 00-.1-3.2s-1.1-.3-3.5 1.3a12 12 0 00-6.2 0C6.5 2.8 5.4 3.1 5.4 3.1a4.2 4.2 0 00-.1 3.2A4.6 4.6 0 004 9.5c0 4.6 2.7 5.7 5.5 6-.6.6-.6 1.2-.5 2V21"/></svg><a href="https://github.com/dbsokol" target="_blank" rel="noopener">GitHub</a></div>
+        <div><svg viewBox="0 0 24 24"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-4 0v7h-4V9h4v1.5A4 4 0 0116 8z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg><a href="https://www.linkedin.com/in/daniel-sokol-b69b0a10b/" target="_blank" rel="noopener">LinkedIn</a></div>
+        <div><svg viewBox="0 0 24 24"><path d="M16 21v-6H4v6h16z"/><path d="M7 13.5l8 1.5M7.5 10l7.5 2.5M9 6.5l6.5 3.5M12 3l5 5"/></svg><a href="https://stackoverflow.com/users/12821675/daniel" target="_blank" rel="noopener">Stack Overflow</a></div>
       </div>
     </div>
   </header>
@@ -306,32 +485,26 @@
     <i>"let's figure out what the hell is going on!"</i>
   </p>
 
-  <div class="tab" id="focus"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span><svg viewBox="0 0 24 24"><rect x="4" y="4" width="7" height="7"/><rect x="13" y="4" width="7" height="7"/><rect x="4" y="13" width="7" height="7"/><rect x="13" y="13" width="7" height="7"/></svg>What I build</div>
-  <div class="plate">
-    <div class="focus">
-      <div class="item"><div class="k">iCardio.ai</div><h3>Echo &amp; PACS software</h3><p>AI-assisted echocardiogram reading, DICOM structured reporting, and PACS viewer engineering — raw cardiac ultrasound to a finished clinical report.</p></div>
-      <div class="item"><div class="k">OlehPay</div><h3>Cross-border payments</h3><p>US–Israel remittance infrastructure — a domestic banking arrangement that sidesteps SWIFT and wire fees, both directions.</p></div>
-      <div class="item"><div class="k">Airplant Gardens</div><h3>Subscription ecommerce</h3><p>A storefront built from the ground up — monthly airplant subscriptions and merch, from signup and billing through fulfilment. Sold in 2020.</p></div>
-      <div class="item"><div class="k">OceanPads</div><h3>Property search</h3><p>A Miami-focused platform for finding an apartment to buy or rent — an interactive map backed by detailed building-level data.</p></div>
-    </div>
-  </div>
+  <div class="divider"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span></div>
+  </section>
 
+  <section class="panel sec-ventures">
   <div class="tab" id="ventures"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M10 21v-6h4v6"/></svg>Ventures</div>
 
   <div class="ventures">
     <a class="venture" href="https://www.icardio.ai" target="_blank" rel="noopener">
       <div class="logo" aria-hidden="true"><img src="./icons/icardio.ai.jpg" alt="" loading="lazy"></div>
       <div class="vhead"><div class="vname">iCardio.ai</div><span class="vrole">Head of Engineering</span></div>
-      <div class="vbody"><p>A cardiac AI company building AI-assisted echocardiogram interpretation and clinical PACS software. I lead engineering across the imaging pipeline, structured reporting, and the ML product lifecycle.</p><span class="vurl">icardio.ai ↗</span></div>
+      <div class="vbody"><p>A cardiac AI company where I lead engineering across the whole stack — the full ML lifecycle from data and labeling through training, evaluation, and deployment; Encephalon, our HIPAA-compliant API serving 20+ models to clients; and AI-PACS, an AI-first reading platform with an embedded Vertex AI assistant to speed up echo reads.</p><span class="vurl">icardio.ai ↗</span></div>
     </a>
 
     <a class="venture" href="https://olehpay.co.il" target="_blank" rel="noopener">
       <div class="logo" aria-hidden="true"><img src="./icons/olehpaylogo.ico" alt="" loading="lazy"></div>
       <div class="vhead"><div class="vname">OlehPay</div><span class="vrole">CTO</span></div>
-      <div class="vbody"><p>A US–Israel money-transfer platform I run with my brother, serving the American expat community in Israel — pensions, salaries, and property payments moved without SWIFT or wire fees.</p><span class="vurl">olehpay.co.il ↗</span></div>
+      <div class="vbody"><p>A US–Israel money-transfer platform I run with my brother, serving thousands of monthly users — pensions, salaries, and property payments moved without SWIFT or wire fees. I lead the engineering: a secure, live web app wired into third-party banking systems, rebuilt three times as we've scaled.</p><span class="vurl">olehpay.co.il ↗</span></div>
     </a>
 
-    <a class="venture" href="https://sokol.enterprises" target="_blank" rel="noopener">
+    <a class="venture no-print" href="https://sokol.enterprises" target="_blank" rel="noopener">
       <div class="logo" aria-hidden="true"><img src="./icons/se.ico" alt="" loading="lazy"></div>
       <div class="vhead"><div class="vname">Sokol Enterprises</div><span class="vrole">Co-founder</span></div>
       <div class="vbody"><p>A technology-focused private holdings company I run alongside my brother, Joseph Sokol. Together we take on software development projects and bespoke web applications across our portfolio.</p><span class="vurl">sokol.enterprises ↗</span></div>
@@ -340,16 +513,29 @@
     <div class="venture">
       <div class="logo" aria-hidden="true"><img src="./icons/airplant-gardens.png" alt="" loading="lazy"></div>
       <div class="vhead"><div class="vname">Airplant Gardens</div><span class="vrole">Co-founder</span></div>
-      <div class="vbody"><p>An ecommerce company built around a monthly airplant subscription, shipped to members alongside a small range of merch. We built the whole platform ourselves — storefront, subscriptions, billing, and fulfilment. Sold in 2020.</p><span class="vurl">airplant.garden · sold 2020</span></div>
+      <div class="vbody"><p>An ecommerce company built around a monthly airplant subscription, shipped to members alongside a small range of merch. We built the whole platform ourselves — storefront, subscriptions, billing, fulfilment, and a sponsorship partner portal for tracking leads. Sold in 2020.</p><span class="vurl">airplant.garden · sold 2020</span></div>
     </div>
 
     <a class="venture" href="#" target="_blank" rel="noopener">
       <div class="logo" aria-hidden="true"><img src="./icons/oceanpads.ico" alt="" loading="lazy"></div>
       <div class="vhead"><div class="vname">OceanPads</div><span class="vrole">Co-founder</span></div>
-      <div class="vbody"><p>A real-estate platform for Miami, giving residents a straightforward way to find an apartment to buy or rent — an interactive map paired with detailed building-level data.</p><span class="vurl">oceanpads.com ↗</span></div>
+      <div class="vbody"><p>A real-estate platform for Miami built heavily on GeoJSON data to map the city's dense high-rise condo landscape — the kind of clarity for buying or renting that generic listing apps like Zillow don't offer down there.</p><span class="vurl">oceanpads.com ↗</span></div>
     </a>
   </div>
 
+  <div class="divider"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span></div>
+  </section>
+
+  <section class="panel sec-education">
+  <div class="tab" id="education"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span><svg viewBox="0 0 24 24"><path d="M2 8.5l10-4 10 4-10 4z"/><path d="M6 10.5V16c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-5.5"/><path d="M22 8.5V14"/></svg>Education</div>
+  <div class="edu">
+    <div class="edu-item"><span class="ek">2019</span><span class="edeg">M.Eng., Software Engineering</span><span class="esch">University of Maryland, College Park</span></div>
+    <div class="edu-item"><span class="ek">2016</span><span class="edeg">B.S., Aerospace Engineering</span><span class="esch">University of Maryland, College Park</span></div>
+  </div>
+  <div class="divider"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span></div>
+  </section>
+
+  <section class="panel sec-papers">
   <div class="tab" id="papers"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span><svg viewBox="0 0 24 24"><path d="M14 3H7a2 2 0 00-2 2v14a2 2 0 002 2h10a2 2 0 002-2V8z"/><path d="M14 3v5h5"/><path d="M9 13h6M9 17h4"/></svg>Papers</div>
   <div class="papers">
     <a class="paper" href="https://doi.org/10.1016/j.echo.2026.07.004" target="_blank" rel="noopener">
@@ -367,19 +553,38 @@
     </a>
   </div>
 
+  <div class="divider"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span></div>
+  </section>
+
+  <section class="panel sec-skills">
+  <div class="tab" id="skills"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span><svg viewBox="0 0 24 24"><path d="M8 6l-6 6 6 6"/><path d="M16 6l6 6-6 6"/></svg>Skills</div>
+  <div class="spec">
+    <div class="spec-head"><span>Tech Stack</span><span>Rev 2026.1</span></div>
+    <div class="spec-row"><span class="spec-k">01 · Languages</span><span class="spec-v">Python · TypeScript / JavaScript · SQL · Bash · Go · HTML/CSS</span></div>
+    <div class="spec-row"><span class="spec-k">02 · Frameworks</span><span class="spec-v">FastAPI · Django · React</span></div>
+    <div class="spec-row"><span class="spec-k">03 · ML / Data</span><span class="spec-v">PyTorch · TensorFlow · NumPy · pandas</span></div>
+    <div class="spec-row"><span class="spec-k">04 · Databases</span><span class="spec-v">PostgreSQL · MySQL · MongoDB · Redis · BigQuery · Snowflake</span></div>
+    <div class="spec-row"><span class="spec-k">05 · Cloud</span><span class="spec-v">AWS · GCP · Lambda · S3 · ECS/EKS · Cloud Run · Vertex AI</span></div>
+    <div class="spec-row"><span class="spec-k">06 · Tools</span><span class="spec-v">Docker · Kubernetes · Terraform · Git</span></div>
+  </div>
+  <div class="divider"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span></div>
+  </section>
+
+  <section class="panel sec-paintings">
   <div class="tab" id="paintings"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 16l5-5 4 4 3-3 6 6"/><circle cx="8.5" cy="9" r="1.4"/></svg>Paintings</div>
-  <div class="reel">
-    <div class="reel-scroll">
-      <div class="reel-track">
-        <img src="./art/grand-canal.jpg" alt="Grand Canal" loading="lazy">
-        <img src="./art/burano.jpg" alt="Burano" loading="lazy">
-        <img src="./art/canal.jpg" alt="Canal" loading="lazy">
-        <img src="./art/boat.jpeg" alt="Boat" loading="lazy">
-        <img src="./art/sea-rock.jpeg" alt="Sea rock" loading="lazy">
-      </div>
-    </div>
+  <div class="gallery">
+    <img src="./art/back-bay.jpg" alt="Back Bay" loading="lazy">
+    <img src="./art/grand-canal.jpg" alt="Grand Canal" loading="lazy">
+    <img src="./art/canal.jpg" alt="Canal" loading="lazy">
+    <img src="./art/boat.jpeg" alt="Boat" loading="lazy">
+    <img src="./art/small-boat.jpg" alt="Small Boat" loading="lazy">
+    <img src="./art/sea-rock.jpeg" alt="Sea rock" loading="lazy">
   </div>
 
+  <div class="divider"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span></div>
+  </section>
+
+  <section class="panel sec-about">
   <div class="tab" id="about"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0114 0v1"/></svg>About</div>
   <div class="about">
     <p>I'm a software engineer based out of San Diego, California, presently the Head of Engineering at <a href="https://www.icardio.ai" target="_blank" rel="noopener">iCardio.ai</a>.</p>
@@ -387,18 +592,69 @@
   </div>
 
   <div class="signoff"><span>— Daniel Sokol</span><span class="place">SAN DIEGO, CA · REV 2026.1</span></div>
+  <div class="divider"><span class="rivet l" aria-hidden="true"></span><span class="rivet r" aria-hidden="true"></span></div>
+  </section>
 </main>
 
+<aside class="legend" aria-hidden="true">
+  <div class="legend-title">Shortcuts</div>
+  <div class="legend-row"><kbd class="mod-key">Ctrl</kbd><kbd class="key-p">P</kbd><span>Résumé</span></div>
+  <div class="legend-row"><kbd class="mod-key">Ctrl</kbd><kbd class="key-m">M</kbd><span>Message</span></div>
+  <div class="legend-row music-row"><kbd class="mod-key">Ctrl</kbd><kbd class="key-j">J</kbd><span>Music</span></div>
+</aside>
+
+<div class="modal" id="contact-modal" aria-hidden="true">
+  <div class="modal-box" role="dialog" aria-modal="true" aria-label="Send a message">
+    <button class="modal-close" type="button" aria-label="Close">✕</button>
+    <div class="modal-title">Send a message</div>
+    <form id="contact-form">
+      <label>Name<input name="name" required autocomplete="name"></label>
+      <label>Email<input name="email" type="email" required autocomplete="email"></label>
+      <label>Message<textarea name="message" rows="4" required></textarea></label>
+      <button type="submit" class="modal-send">Send</button>
+      <div class="modal-status" aria-live="polite"></div>
+    </form>
+  </div>
+</div>
+
+<div class="lightbox" id="lightbox" aria-hidden="true">
+  <button class="close" aria-label="Close"><svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+  <img src="" alt="">
+</div>
+
 <script>
-  const secs=[...document.querySelectorAll('#top,#focus,#ventures,#papers,#paintings,#about')];
+  const panels=[...document.querySelectorAll('.panel')];
   const links=[...document.querySelectorAll('.rail nav a')];
-  const io=new IntersectionObserver(es=>{
-    es.forEach(e=>{if(e.isIntersecting){
-      const i=secs.indexOf(e.target);
-      if(i>-1){links.forEach(l=>l.classList.remove('active'));links[i]&&links[i].classList.add('active');}
-    }});
-  },{rootMargin:'-35% 0px -55% 0px'});
-  secs.forEach(s=>io.observe(s));
+  const setActive=l=>{links.forEach(x=>x.classList.remove('active'));l&&l.classList.add('active')};
+
+  // active = the last panel whose top has crossed a line 30% down the viewport;
+  // the very bottom always resolves to the last icon. 30% tested to give every
+  // section its own range across all realistic viewport heights.
+  const currentSection=()=>{
+    if(innerHeight+Math.ceil(scrollY)>=document.documentElement.scrollHeight-2) return panels.length-1;
+    const ref=innerHeight*0.3; let cur=0;
+    for(let i=0;i<panels.length;i++){
+      if(panels[i].getBoundingClientRect().top<=ref) cur=i;
+    }
+    return cur;
+  };
+  // on click we lock the clicked icon and hold it while the smooth-scroll travels,
+  // releasing only once the page actually arrives there — so the highlight never
+  // sweeps through the icons in between.
+  let lockIdx=null, lockTimer=0;
+  const syncNav=()=>{
+    const cur=currentSection();
+    if(lockIdx!==null){ if(cur===lockIdx) lockIdx=null; else return setActive(links[lockIdx]); }
+    setActive(links[cur]);
+  };
+  links.forEach((l,i)=>l.addEventListener('click',()=>{
+    lockIdx=i; setActive(l);
+    clearTimeout(lockTimer); lockTimer=setTimeout(()=>{lockIdx=null;syncNav()},1500);
+  }));
+  // a manual scroll gesture cancels the lock so the highlight can never get stuck
+  ['wheel','touchstart','keydown'].forEach(ev=>addEventListener(ev,()=>{lockIdx=null},{passive:true}));
+  addEventListener('resize',syncNav);
+  syncNav();
 
   // the iframe is created on click (a user gesture) so audio is allowed;
   // removing it on close is what actually stops playback
@@ -407,80 +663,107 @@
   musicBtn.addEventListener('click',()=>{
     const open=player.classList.toggle('open');
     musicBtn.classList.toggle('on',open);
+    document.querySelector('.music-row').classList.toggle('playing',open);
     musicBtn.setAttribute('aria-pressed',open);
     musicBtn.setAttribute('aria-label',open?'Stop music':'Play music');
     if(open){
+      const ids=['Qz3nLOiyCv8','i_1FyfLMLNM'];
+      const id=ids[Math.floor(Math.random()*ids.length)];
       const f=document.createElement('iframe');
       f.allow='autoplay; encrypted-media';
       f.title='Music';
-      f.src='https://www.youtube-nocookie.com/embed/Qz3nLOiyCv8?autoplay=1&loop=1&playlist=Qz3nLOiyCv8&rel=0';
+      f.src='https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&loop=1&playlist='+id+'&rel=0';
       player.appendChild(f);
     }else{
       player.replaceChildren();
     }
   });
 
-  const reel=document.querySelector('.reel-scroll');
-  const track=document.querySelector('.reel-track');
-
-  // a second copy of the strip is what makes the wrap seamless:
-  // scrollLeft 0 and scrollLeft half show identical pixels
-  [...track.children].forEach(img=>{
-    const c=img.cloneNode(true);
-    c.alt='';c.setAttribute('aria-hidden','true');
-    track.appendChild(c);
+  // paintings lightbox
+  const lb=document.getElementById('lightbox');
+  const lbImg=lb.querySelector('img');
+  const openLb=src=>{lbImg.src=src;lb.classList.add('open');lb.setAttribute('aria-hidden','false')};
+  const closeLb=()=>{lb.classList.remove('open');lb.setAttribute('aria-hidden','true');lbImg.src=''};
+  document.querySelectorAll('.gallery img').forEach(img=>{
+    img.addEventListener('click',()=>openLb(img.currentSrc||img.src));
   });
+  lb.addEventListener('click',closeLb);
+  addEventListener('keydown',e=>{if(e.key==='Escape')closeLb()});
 
-  const half=()=>track.scrollWidth/2;
-  const norm=p=>{const h=half();return ((p%h)+h)%h};
-  const apply=p=>{reel.scrollLeft=norm(p)};
+  // show ⌘ on macOS, Ctrl elsewhere
+  if(/Mac|iPhone|iPad|iPod/.test(navigator.platform||navigator.userAgent))
+    document.querySelectorAll('.mod-key').forEach(k=>k.textContent='⌘');
 
-  let dragging=false,startX=0,startPos=0,vel=0,lastX=0,lastT=0,raf=0;
-
-  const coast=()=>{
-    if(dragging||Math.abs(vel)<0.2)return;
-    apply(reel.scrollLeft+vel);
-    vel*=0.9;
-    raf=requestAnimationFrame(coast);
+  // light up the legend keys as they're pressed
+  const modKeys=[...document.querySelectorAll('.legend .mod-key')];
+  const letterKeys={p:document.querySelector('.key-p'),m:document.querySelector('.key-m'),j:document.querySelector('.key-j')};
+  const light=(e,on)=>{
+    if(/^(INPUT|TEXTAREA)$/.test(e.target.tagName))return;          // ignore typing in the modal
+    if(e.key==='Control'||e.key==='Meta') modKeys.forEach(k=>k.classList.toggle('lit',on));
+    const el=letterKeys[(e.key||'').toLowerCase()];
+    if(el) el.classList.toggle('lit',on);
   };
+  addEventListener('keydown',e=>light(e,true));
+  addEventListener('keyup',e=>light(e,false));
+  // print dialog / lost focus can eat the keyup — clear everything on blur
+  const clearKeys=()=>{modKeys.forEach(k=>k.classList.remove('lit'));Object.values(letterKeys).forEach(el=>el&&el.classList.remove('lit'))};
+  addEventListener('blur',clearKeys);
 
-  reel.addEventListener('pointerdown',e=>{
-    cancelAnimationFrame(raf);
-    dragging=true;vel=0;
-    startX=lastX=e.clientX;lastT=performance.now();
-    startPos=reel.scrollLeft;
-    reel.classList.add('dragging');
-    reel.setPointerCapture(e.pointerId);
+  // contact modal — Ctrl/Cmd+M opens it; posts to Web3Forms (no backend needed)
+  const WEB3FORMS_KEY='ff49d768-fa72-47c5-983a-384da5ed6d0a';
+  const modal=document.getElementById('contact-modal');
+  const cform=document.getElementById('contact-form');
+  const cstatus=modal.querySelector('.modal-status');
+  const openModal=()=>{modal.classList.add('open');modal.setAttribute('aria-hidden','false');cform.querySelector('input').focus()};
+  const closeModal=()=>{modal.classList.remove('open');modal.setAttribute('aria-hidden','true')};
+  modal.querySelector('.modal-close').addEventListener('click',closeModal);
+  modal.addEventListener('click',e=>{if(e.target===modal)closeModal()});
+  addEventListener('keydown',e=>{
+    if((e.ctrlKey||e.metaKey)&&(e.key==='m'||e.key==='M')){e.preventDefault();openModal()}
+    if((e.ctrlKey||e.metaKey)&&(e.key==='j'||e.key==='J')){e.preventDefault();musicBtn.click()}
+    if(e.key==='Escape')closeModal();
   });
-  reel.addEventListener('pointermove',e=>{
-    if(!dragging)return;
-    apply(startPos-(e.clientX-startX));
-    const t=performance.now(),dt=t-lastT;
-    if(dt>0){vel=(lastX-e.clientX)/dt*16;lastX=e.clientX;lastT=t}
+  cform.addEventListener('submit',async e=>{
+    e.preventDefault();
+    const btn=cform.querySelector('.modal-send');
+    const data=Object.fromEntries(new FormData(cform));
+    btn.disabled=true;cstatus.className='modal-status';cstatus.textContent='Sending…';
+    try{
+      const r=await fetch('https://api.web3forms.com/submit',{
+        method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+        body:JSON.stringify({access_key:WEB3FORMS_KEY,subject:'Portfolio message from '+data.name,...data})
+      });
+      const j=await r.json();
+      if(j.success){cstatus.className='modal-status ok';cstatus.textContent="Sent — thanks! I'll be in touch.";cform.reset()}
+      else{cstatus.className='modal-status err';cstatus.textContent='Something went wrong — email me directly instead.'}
+    }catch{cstatus.className='modal-status err';cstatus.textContent='Network error — email me directly instead.'}
+    btn.disabled=false;
   });
-  const endDrag=()=>{
-    if(!dragging)return;
-    dragging=false;
-    vel*=0.12;
-    reel.classList.remove('dragging');
-    raf=requestAnimationFrame(coast);
-  };
-  reel.addEventListener('pointerup',endDrag);
-  reel.addEventListener('pointercancel',endDrag);
 
-  // keep wheel/trackpad scrolling inside the loop too
-  reel.addEventListener('scroll',()=>{
-    if(dragging)return;
-    const h=half();
-    if(reel.scrollLeft>=h)reel.scrollLeft-=h;
-  },{passive:true});
+  // Ctrl/Cmd+P prints the résumé (resume.html) instead of the site, via a hidden
+  // iframe — keeps resume.html as the single source of truth for the résumé.
+  addEventListener('keydown',e=>{
+    if((e.ctrlKey||e.metaKey)&&(e.key==='p'||e.key==='P')){
+      e.preventDefault();
+      const f=document.createElement('iframe');
+      f.style.cssText='position:fixed;width:0;height:0;border:0;right:0;bottom:0';
+      f.src='./resume.html';
+      f.onload=()=>{
+        const w=f.contentWindow; w.focus(); w.print();
+        w.addEventListener('afterprint',()=>f.remove());
+        setTimeout(()=>{document.body.contains(f)&&f.remove()},60000);
+      };
+      document.body.appendChild(f);
+    }
+  });
 
   let ticking=false;
   addEventListener('scroll',()=>{
     if(ticking)return;
     ticking=true;
     requestAnimationFrame(()=>{
-      document.body.style.setProperty('--py',(scrollY*-0.18)+'px');
+      document.body.style.setProperty('--py',(scrollY*-0.06)+'px');
+      syncNav();
       ticking=false;
     });
   },{passive:true});

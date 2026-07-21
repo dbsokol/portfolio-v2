@@ -1,0 +1,29 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python3 svggear.py)",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\g1.png\" --window-size=520,300 --hide-scrollbars \"file:///C:/Users/danie/gearprev.html\")",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\g2.png\" --window-size=420,320 --hide-scrollbars \"file:///C:/Users/danie/gearprev.html\")",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\g3.png\" --window-size=640,320 --hide-scrollbars \"file:///C:/Users/danie/gearprev.html\")",
+      "Bash(python3 -c ' *)",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\g4.png\" --window-size=680,360 --hide-scrollbars \"file:///C:/Users/danie/gearprev.html\")",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\g5.png\" --window-size=680,360 --hide-scrollbars \"file:///C:/Users/danie/gearprev.html\")",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\g6.png\" --window-size=680,360 --hide-scrollbars \"file:///C:/Users/danie/gearprev.html\")",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\g7.png\" --window-size=680,360 --hide-scrollbars \"file:///C:/Users/danie/gearprev.html\")",
+      "Bash(python3 city.py)",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\city1.png\" --window-size=400,640 --hide-scrollbars \"file:///C:/Users/danie/cityprev.html\")",
+      "Bash(python3 pxbuild.py)",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\px1.png\" --window-size=560,640 --hide-scrollbars \"file:///C:/Users/danie/cityprev.html\")",
+      "Bash(python3 neon.py)",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\neon1.png\" --window-size=760,640 --hide-scrollbars \"file:///C:/Users/danie/cityprev.html\")",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\cs.png\" --window-size=800,800 --hide-scrollbars \"file:///C:/Users/danie/cityscape.svg\")",
+      "Bash(awk '{print $5, $9}')",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\neononly.png\" --window-size=800,800 --hide-scrollbars \"file:///C:/Users/danie/neononly.html\")",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --virtual-time-budget=3000 --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\pulse.png\" --window-size=1280,900 --hide-scrollbars \"file://///wsl.localhost/Ubuntu/home/foxy/projects/portfoilio/index.html\")",
+      "Bash(sed -i 's/ filter:drop-shadow\\(0 0 5px rgba\\(120,240,240,.5\\)\\);//' index.html)",
+      "Bash(sed 's/.neon-layer .lit{opacity:.1}/.neon-layer .lit{opacity:1;animation:none!important}/' index.html)",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\hi2.png\" --window-size=900,700 --hide-scrollbars \"file:///C:/Users/danie/hi.html\")",
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --window-size=390,844 --dump-dom \"file:///C:/Users/danie/diag.html\")"
+    ]
+  }
+}
