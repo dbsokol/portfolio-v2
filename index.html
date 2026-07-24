@@ -35,16 +35,51 @@
   }
   a{color:inherit;text-decoration:none}
 
-
-  /* cityscape background — fixed, full page, parallax drift via --py.
-     over-sized top/bottom so the drift never exposes an edge */
-  body::before{
-    content:"";position:fixed;top:-25%;bottom:-25%;left:0;right:0;z-index:0;pointer-events:none;
-    background:url(./cityscape.svg) center/cover no-repeat;
-    opacity:.85;
-    transform:translateY(var(--py,0px));
-    will-change:transform;
+  /* preloader — gears centred on a plain page until everything has loaded */
+  #loader{
+    position:fixed;inset:0;z-index:200;background:var(--paper);
+    display:flex;align-items:center;justify-content:center;
+    transition:opacity .5s ease;
   }
+  #loader img{width:140px;height:auto}
+  #loader.done{opacity:0;pointer-events:none}
+
+
+  /* layered parallax cityscape — sky (far) + two building planes (mid, near).
+     the building JPGs are dark-on-white, so multiply drops the white and keeps the towers */
+  .citybg{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:.9}
+  /* top pinned to viewport top (image tops visible at scroll 0); overflow only
+     at the bottom, which is where the upward parallax travels into */
+  .citybg .layer{
+    position:absolute;inset:0 0 -35% 0;will-change:transform;
+    background-repeat:no-repeat;background-position:center top;
+  }
+  .bg-sky{background-image:url("background/background-2.png");background-size:cover}
+  .bg-mid{background-image:url("background/buildings-back-2.png")}
+  .bg-front{background-image:url("background/buildings-front-2.png")}
+  /* full width so there are no side gaps; height scales proportionally (top-anchored) */
+  .bg-mid,.bg-front{background-size:100% auto}
+
+  /* window glows — full-frame overlays that inherit their layer's parallax transform,
+     so each stays pinned to its building. each flickers on its own timer like a bad bulb */
+  .win{
+    position:absolute;inset:0;pointer-events:none;
+    background-repeat:no-repeat;background-position:center top;background-size:100% auto;
+  }
+  .wb1{background-image:url("background/window-back-1.png")}
+  .wb2{background-image:url("background/window-back-2.png")}
+  .wb3{background-image:url("background/window-back-3.png")}
+  .wf1{background-image:url("background/window-front-1.png")}
+  .wf2{background-image:url("background/window-front-2.png")}
+  @keyframes bulbA{0%,100%{opacity:1}6%{opacity:.35}7%{opacity:1}43%{opacity:1}44%{opacity:.2}46%{opacity:.9}47%{opacity:.3}49%{opacity:1}80%{opacity:.85}}
+  @keyframes bulbB{0%,100%{opacity:.95}20%{opacity:1}21%{opacity:.25}23%{opacity:1}60%{opacity:1}61%{opacity:.4}62%{opacity:1}63%{opacity:.15}65%{opacity:1}}
+  @keyframes bulbC{0%,100%{opacity:1}31%{opacity:.3}33%{opacity:1}55%{opacity:.75}90%{opacity:1}91%{opacity:.2}93%{opacity:1}}
+  .wb1{animation:bulbA 4.3s ease-in-out    0s infinite}
+  .wb2{animation:bulbB 5.7s ease-in-out -1.2s infinite}
+  .wb3{animation:bulbC 3.9s ease-in-out -0.6s infinite}
+  .wf1{animation:bulbB 4.9s ease-in-out -2.1s infinite}
+  .wf2{animation:bulbA 6.1s ease-in-out -0.9s infinite}
+  @media(prefers-reduced-motion:reduce){.win{animation:none}}
 
   /* ============ side rail nav ============ */
   .rail{
@@ -96,13 +131,14 @@
   @media(max-width:720px){:root{--rail:48px}.tip{display:none}}
 
   /* ============ stage ============ */
-  .stage{margin:0 auto;max-width:840px;padding:44px 46px 60px;z-index:1}
+  .stage{margin:0;max-width:840px;padding:44px 46px 60px;z-index:1}
   @media(max-width:720px){.stage{padding:28px 22px 48px}}
 
   /* solid rounded panel behind each section, cityscape shows in the gaps */
   .panel{
-    max-width:748px;margin:0 auto 22px;padding:30px 34px;
-    background:var(--paper);
+    max-width:748px;margin:0 0 80px;padding:30px 34px;
+    background:rgba(233,228,216,.82);         /* --paper, translucent so the city shows through */
+    -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
     border:1.5px solid var(--line);border-radius:12px;
     box-shadow:0 6px 26px rgba(20,16,32,.28);
   }
@@ -370,7 +406,7 @@
 
   /* ============ shortcuts legend (desktop, left gutter) ============ */
   .legend{
-    position:fixed;top:44px;left:calc(var(--rail) + 22px);z-index:35;
+    position:fixed;top:44px;right:26px;z-index:35;
     width:174px;padding:12px 14px;pointer-events:none;
     background:var(--paper);border:1.5px solid var(--line);border-radius:8px;
     box-shadow:0 6px 22px rgba(20,16,32,.25);
@@ -404,7 +440,7 @@
   /* placed last so these overrides win over the base rules above */
   @media(max-width:720px){
     /* plain cream page: no cityscape, no card panels (rivets stay) */
-    body::before{display:none}
+    .citybg{display:none}
     /* corner ticks poke 14px past the stage edge — off on mobile (kills the right overflow) */
     .sheet::before,.sheet::after{display:none}
     .panel{background:none;border:0;border-radius:0;box-shadow:none;padding:0;margin:0 auto 4px}
@@ -438,6 +474,18 @@
 </style>
 </head>
 <body>
+
+<div id="loader"><img src="./gears.gif" alt="Loading"></div>
+
+<div class="citybg" aria-hidden="true">
+  <div class="layer bg-sky"></div>
+  <div class="layer bg-mid">
+    <div class="win wb1"></div><div class="win wb2"></div><div class="win wb3"></div>
+  </div>
+  <div class="layer bg-front">
+    <div class="win wf1"></div><div class="win wf2"></div>
+  </div>
+</div>
 
 <!-- ============ side rail ============ -->
 <aside class="rail">
@@ -623,8 +671,15 @@
 </div>
 
 <script>
+  // preloader: reveal the page once all resources are in (or after a safety timeout)
+  const loader=document.getElementById('loader');
+  const hideLoader=()=>{if(!loader.classList.contains('done')){loader.classList.add('done');setTimeout(()=>loader.style.display='none',600)}};
+  addEventListener('load',hideLoader);
+  setTimeout(hideLoader,12000);
+
   const panels=[...document.querySelectorAll('.panel')];
   const links=[...document.querySelectorAll('.rail nav a')];
+  const bgSky=document.querySelector('.bg-sky'),bgMid=document.querySelector('.bg-mid'),bgFront=document.querySelector('.bg-front');
   const setActive=l=>{links.forEach(x=>x.classList.remove('active'));l&&l.classList.add('active')};
 
   // active = the last panel whose top has crossed a line 30% down the viewport;
@@ -762,7 +817,14 @@
     if(ticking)return;
     ticking=true;
     requestAnimationFrame(()=>{
-      document.body.style.setProperty('--py',(scrollY*-0.06)+'px');
+      // drive by scroll progress (0→1) so the layers stay in sync; each layer's
+      // travel is a fraction of the viewport, front = its full overflow (20%) so it
+      // lands exactly at the bottom edge on the last scroll — never past it.
+      const max=Math.max(1,document.documentElement.scrollHeight-innerHeight);
+      const p=Math.min(1,scrollY/max);
+      bgSky.style.transform  ='translateY('+(-p*innerHeight*0.05)+'px)';
+      bgMid.style.transform  ='translateY('+(-p*innerHeight*0.12)+'px)';
+      bgFront.style.transform='translateY('+(-p*innerHeight*0.20)+'px)';
       syncNav();
       ticking=false;
     });
