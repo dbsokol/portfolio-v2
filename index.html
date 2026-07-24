@@ -67,24 +67,26 @@
     background-repeat:no-repeat;background-position:center top;background-size:100% auto;
   }
   .wb1{background-image:url("background/window-back-1.png")}
-  .wb2{background-image:url("background/window-back-2.png")}
   .wb3{background-image:url("background/window-back-3.png")}
   .wf1{background-image:url("background/window-front-1.png")}
   .wf2{background-image:url("background/window-front-2.png")}
   @keyframes bulbA{0%,100%{opacity:1}6%{opacity:.35}7%{opacity:1}43%{opacity:1}44%{opacity:.2}46%{opacity:.9}47%{opacity:.3}49%{opacity:1}80%{opacity:.85}}
   @keyframes bulbB{0%,100%{opacity:.95}20%{opacity:1}21%{opacity:.25}23%{opacity:1}60%{opacity:1}61%{opacity:.4}62%{opacity:1}63%{opacity:.15}65%{opacity:1}}
   @keyframes bulbC{0%,100%{opacity:1}31%{opacity:.3}33%{opacity:1}55%{opacity:.75}90%{opacity:1}91%{opacity:.2}93%{opacity:1}}
-  .wb1{animation:bulbA 4.3s ease-in-out    0s infinite}
-  .wb2{animation:bulbB 5.7s ease-in-out -1.2s infinite}
+  /* only the "-2" and "-3" windows flicker; the "-1" windows stay steady-lit */
   .wb3{animation:bulbC 3.9s ease-in-out -0.6s infinite}
-  .wf1{animation:bulbB 4.9s ease-in-out -2.1s infinite}
   .wf2{animation:bulbA 6.1s ease-in-out -0.9s infinite}
   @media(prefers-reduced-motion:reduce){.win{animation:none}}
 
   /* ============ side rail nav ============ */
-  .rail{
+  /* navbar background/border — its own fixed layer so it sits BEHIND the panels
+     while the rail contents (icons) stack ABOVE them */
+  .rail-bg{
     position:fixed;top:0;left:0;bottom:0;width:var(--rail);z-index:40;
     background:var(--ink);
+  }
+  .rail{
+    position:fixed;top:0;left:0;bottom:0;width:var(--rail);z-index:60;
     display:flex;flex-direction:column;align-items:center;padding:18px 0;
   }
   .rail .mark{
@@ -93,14 +95,21 @@
     border:1.5px solid rgba(233,228,216,.45);border-radius:3px;
     width:36px;height:36px;display:flex;align-items:center;justify-content:center;margin-bottom:24px;
   }
-  .rail nav{display:flex;flex-direction:column;gap:4px;flex:1}
+  .rail nav{display:flex;flex-direction:column;gap:4px;flex:1;position:relative}
   .rail a{
     width:44px;height:44px;border-radius:4px;
     display:flex;align-items:center;justify-content:center;
-    color:rgba(233,228,216,.55);position:relative;transition:.18s;
+    color:rgba(233,228,216,.55);position:relative;z-index:1;transition:color .18s;
   }
   .rail a svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.5;fill:none;stroke-linecap:round;stroke-linejoin:round}
-  .rail a:hover,.rail a.active{color:var(--paper);background:rgba(233,228,216,.1)}
+  .rail a:hover{color:var(--paper);background:rgba(233,228,216,.1)}
+  .rail a.active{color:var(--paper)}
+  /* the "elevator car" — a single highlight that glides between floors */
+  .rail-cab{
+    position:absolute;top:0;left:0;width:44px;height:44px;border-radius:5px;z-index:0;
+    background:rgba(233,228,216,.13);border-left:2px solid var(--teal);
+    transition:transform .45s cubic-bezier(.5,.05,.2,1);pointer-events:none;
+  }
   .rail a:hover .tip{opacity:1;transform:translate(0,-50%)}
   .tip{
     position:absolute;left:52px;top:50%;transform:translate(-6px,-50%);
@@ -131,16 +140,16 @@
   @media(max-width:720px){:root{--rail:48px}.tip{display:none}}
 
   /* ============ stage ============ */
-  .stage{margin:0;max-width:840px;padding:44px 46px 60px;z-index:1}
+  .stage{margin:0;max-width:840px;padding:44px 46px 60px 0;position:relative;z-index:41}
   @media(max-width:720px){.stage{padding:28px 22px 48px}}
 
   /* solid rounded panel behind each section, cityscape shows in the gaps */
   .panel{
-    max-width:748px;margin:0 0 80px;padding:30px 34px;
+    max-width:748px;margin:0 0 80px;padding:30px 34px 30px 16px;
     background:rgba(233,228,216,.82);         /* --paper, translucent so the city shows through */
     -webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px);
-    border:1.5px solid var(--line);border-radius:12px;
-    box-shadow:0 6px 26px rgba(20,16,32,.28);
+    border:1.5px solid var(--line);border-radius:0 12px 12px 0;
+    box-shadow:13px 6px 26px -13px rgba(20,16,32,.28);
   }
   .panel > :first-child{margin-top:0}
   .panel .tab{margin-top:0}
@@ -436,6 +445,90 @@
   /* hide when the gutter is too narrow to hold it without touching content */
   @media(max-width:1200px){.legend{display:none}}
 
+  /* ============ desktop: dark "glass" panels so content joins the night city ============ */
+  @media(min-width:721px){
+    .panel{
+      /* remap the palette to a dark theme — everything inside uses these vars */
+      /* industrial teal palette with a warm amber accent (per the reference) */
+      --ink:#e3e9e6;               /* main text → cool off-white */
+      --ink-soft:#9db1af;          /* secondary → teal-grey */
+      --indigo:#82bacd;            /* links / icons → steel cyan */
+      --teal:#50ccbe;              /* labels → industrial cyan */
+      --rose:#e3a85c;              /* accents → warm amber glow */
+      --line:rgba(150,192,188,.22);       /* borders, rivets, rules → teal-steel */
+      --line-soft:rgba(150,192,188,.14);
+      --plate:#2b3036;                    /* inner cards → slightly darker than panel */
+      --paper:#2b3036;
+      --grid:rgba(120,182,180,.10);
+      /* re-declare color: descendants otherwise inherit body's computed dark ink */
+      color:var(--ink);
+      /* nudge the panel left so the left rivet's centre sits on the navbar seam
+         (tucks the panel edge just under the rail) */
+      margin-left:-11px;
+      /* solid panel, same colour as the navbar (#33383d) so they read as one surface */
+      background:#33383d;
+      position:relative;
+      border:0;   /* border drawn by ::before below so it can stop at the nav seam */
+      box-shadow:
+        20px 14px 40px -20px rgba(0,0,0,.5),
+        13px 0 26px -13px rgba(224,168,88,.05);
+    }
+    /* top/right/bottom border, trimmed on the left so it starts at the nav seam
+       (the panel itself overlaps the nav by 11px) */
+    .panel::before{
+      content:"";position:absolute;inset:0 0 0 11px;
+      border:1.5px solid rgba(132,192,188,.24);border-left:0;
+      border-radius:0 12px 12px 0;pointer-events:none;
+    }
+    /* logos have light plates — drop the darken blend that only made sense on paper */
+    .venture .logo img[src*="airplant"],
+    .venture .logo img[src*="icardio"],
+    .venture .logo img[src*="se.ico"]{mix-blend-mode:normal}
+    /* rivets read better a touch brighter on glass */
+    .panel .rivet{border-color:rgba(233,228,216,.4)}
+    .panel .rivet::after{background:rgba(233,228,216,.45)}
+    /* seam line: same border as the panels, drawn on the navbar's right edge */
+    .rail-bg{border-right:1.5px solid rgba(132,192,188,.24)}
+    /* contact modal matches the dark panel surface too */
+    .modal-box{
+      --ink:#e3e9e6;
+      --ink-soft:#9db1af;
+      --indigo:#82bacd;
+      --teal:#50ccbe;
+      --rose:#e3a85c;
+      --line:rgba(150,192,188,.22);
+      --line-soft:rgba(150,192,188,.14);
+      --plate:#2b3036;
+      --paper:#2b3036;
+      color:var(--ink);
+      background:#33383d;
+      border:1.5px solid rgba(132,192,188,.24);
+      border-radius:12px;
+      box-shadow:
+        0 14px 40px rgba(0,0,0,.5),
+        0 0 26px rgba(224,168,88,.05);
+    }
+    /* legend matches the dark panel surface (same remap, floats free so full shadow) */
+    .legend{
+      --ink:#e3e9e6;
+      --ink-soft:#9db1af;
+      --indigo:#82bacd;
+      --teal:#50ccbe;
+      --rose:#e3a85c;
+      --line:rgba(150,192,188,.22);
+      --line-soft:rgba(150,192,188,.14);
+      --plate:#2b3036;
+      --paper:#2b3036;
+      color:var(--ink);
+      background:#33383d;
+      border:1.5px solid rgba(132,192,188,.24);
+      border-radius:12px;
+      box-shadow:
+        0 14px 40px rgba(0,0,0,.5),
+        0 0 26px rgba(224,168,88,.05);
+    }
+  }
+
   /* ============ mobile ============ */
   /* placed last so these overrides win over the base rules above */
   @media(max-width:720px){
@@ -480,7 +573,7 @@
 <div class="citybg" aria-hidden="true">
   <div class="layer bg-sky"></div>
   <div class="layer bg-mid">
-    <div class="win wb1"></div><div class="win wb2"></div><div class="win wb3"></div>
+    <div class="win wb1"></div><div class="win wb3"></div>
   </div>
   <div class="layer bg-front">
     <div class="win wf1"></div><div class="win wf2"></div>
@@ -488,9 +581,11 @@
 </div>
 
 <!-- ============ side rail ============ -->
+<div class="rail-bg" aria-hidden="true"></div>
 <aside class="rail">
   <a href="#top" class="mark" aria-label="Home">DS</a>
   <nav>
+    <span class="rail-cab" aria-hidden="true"></span>
     <a href="#top" class="active" aria-label="Overview"><svg viewBox="0 0 24 24"><path d="M3 12l9-8 9 8"/><path d="M5 10v10h14V10"/></svg><span class="tip">Overview</span></a>
     <a href="#ventures" aria-label="Ventures"><svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V8l7-5 7 5v13"/><path d="M10 21v-6h4v6"/></svg><span class="tip">Ventures</span></a>
     <a href="#education" aria-label="Education"><svg viewBox="0 0 24 24"><path d="M2 8.5l10-4 10 4-10 4z"/><path d="M6 10.5V16c0 1.1 2.7 2.5 6 2.5s6-1.4 6-2.5v-5.5"/><path d="M22 8.5V14"/></svg><span class="tip">Education</span></a>
@@ -680,7 +775,11 @@
   const panels=[...document.querySelectorAll('.panel')];
   const links=[...document.querySelectorAll('.rail nav a')];
   const bgSky=document.querySelector('.bg-sky'),bgMid=document.querySelector('.bg-mid'),bgFront=document.querySelector('.bg-front');
-  const setActive=l=>{links.forEach(x=>x.classList.remove('active'));l&&l.classList.add('active')};
+  const railCab=document.querySelector('.rail-cab');
+  const setActive=l=>{
+    links.forEach(x=>x.classList.remove('active'));
+    if(l){l.classList.add('active');railCab.style.transform='translateY('+l.offsetTop+'px)';}
+  };
 
   // active = the last panel whose top has crossed a line 30% down the viewport;
   // the very bottom always resolves to the last icon. 30% tested to give every
