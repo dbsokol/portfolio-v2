@@ -23,7 +23,13 @@
       "Bash(sed -i 's/ filter:drop-shadow\\(0 0 5px rgba\\(120,240,240,.5\\)\\);//' index.html)",
       "Bash(sed 's/.neon-layer .lit{opacity:.1}/.neon-layer .lit{opacity:1;animation:none!important}/' index.html)",
       "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --screenshot=\"C:\\\\\\\\Users\\\\\\\\danie\\\\\\\\hi2.png\" --window-size=900,700 --hide-scrollbars \"file:///C:/Users/danie/hi.html\")",
-      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --window-size=390,844 --dump-dom \"file:///C:/Users/danie/diag.html\")"
+      "Bash(\"/mnt/c/Program Files/Google/Chrome/Application/chrome.exe\" --headless=new --disable-gpu --window-size=390,844 --dump-dom \"file:///C:/Users/danie/diag.html\")",
+      "Bash(python3 -c \"import PIL\")",
+      "Bash(pip3 --version)",
+      "Bash(python3 -m pip --version)",
+      "Bash(apt list *)",
+      "Bash(npm init *)",
+      "Bash(npm install *)"
     ]
   }
 }
